@@ -1,28 +1,46 @@
 "use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function e(t, n, r) {
   function s(o, u) {
     if (!n[o]) {
       if (!t[o]) {
-        var a = typeof require == "function" && require;if (!u && a) return a(o, !0);if (i) return i(o, !0);throw new Error("Cannot find module '" + o + "'");
-      }var f = n[o] = { exports: {} };t[o][0].call(f.exports, function (e) {
-        var n = t[o][1][e];return s(n ? n : e);
+        var a = typeof require == "function" && require;
+        if (!u && a) return a(o, !0);
+        if (i) return i(o, !0);
+        throw new Error("Cannot find module '" + o + "'");
+      }
+
+      var f = n[o] = {
+        exports: {}
+      };
+      t[o][0].call(f.exports, function (e) {
+        var n = t[o][1][e];
+        return s(n ? n : e);
       }, f, f.exports, e, t, n, r);
-    }return n[o].exports;
-  }var i = typeof require == "function" && require;for (var o = 0; o < r.length; o++) {
+    }
+
+    return n[o].exports;
+  }
+
+  var i = typeof require == "function" && require;
+
+  for (var o = 0; o < r.length; o++) {
     s(r[o]);
-  }return s;
-})({ 1: [function (require, module, exports) {
+  }
+
+  return s;
+})({
+  1: [function (require, module, exports) {
     (function (process, global, Buffer, __argument0, __argument1, __argument2, __argument3, __filename, __dirname) {
       var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+      ;
 
-      ;(function (exports) {
+      (function (exports) {
         'use strict';
 
         var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array;
-
         var PLUS = '+'.charCodeAt(0);
         var SLASH = '/'.charCodeAt(0);
         var NUMBER = '0'.charCodeAt(0);
@@ -34,8 +52,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         function decode(elt) {
           var code = elt.charCodeAt(0);
           if (code === PLUS || code === PLUS_URL_SAFE) return 62; // '+'
+
           if (code === SLASH || code === SLASH_URL_SAFE) return 63; // '/'
+
           if (code < NUMBER) return -1; //no match
+
           if (code < NUMBER + 10) return code - NUMBER + 26 + 26;
           if (code < UPPER + 26) return code - UPPER;
           if (code < LOWER + 26) return code - LOWER + 26;
@@ -46,22 +67,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
           if (b64.length % 4 > 0) {
             throw new Error('Invalid string. Length must be a multiple of 4');
-          }
-
-          // the number of equal signs (place holders)
+          } // the number of equal signs (place holders)
           // if there are two placeholders, than the two characters before it
           // represent one byte
           // if there is only one, then the three characters before it represent 2 bytes
           // this is just a cheap hack to not do indexOf twice
+
+
           var len = b64.length;
-          placeHolders = '=' === b64.charAt(len - 2) ? 2 : '=' === b64.charAt(len - 1) ? 1 : 0;
+          placeHolders = '=' === b64.charAt(len - 2) ? 2 : '=' === b64.charAt(len - 1) ? 1 : 0; // base64 is 4/3 + up to two characters of the original data
 
-          // base64 is 4/3 + up to two characters of the original data
-          arr = new Arr(b64.length * 3 / 4 - placeHolders);
+          arr = new Arr(b64.length * 3 / 4 - placeHolders); // if there are placeholders, only get up to the last complete 4 chars
 
-          // if there are placeholders, only get up to the last complete 4 chars
           l = placeHolders > 0 ? b64.length - 4 : b64.length;
-
           var L = 0;
 
           function push(v) {
@@ -101,15 +119,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
           function tripletToBase64(num) {
             return encode(num >> 18 & 0x3F) + encode(num >> 12 & 0x3F) + encode(num >> 6 & 0x3F) + encode(num & 0x3F);
-          }
+          } // go through the array every three bytes, we'll deal with trailing stuff later
 
-          // go through the array every three bytes, we'll deal with trailing stuff later
+
           for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
             temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + uint8[i + 2];
             output += tripletToBase64(temp);
-          }
+          } // pad the end with zeros, but make sure to not forget the extra bytes
 
-          // pad the end with zeros, but make sure to not forget the extra bytes
+
           switch (extraBytes) {
             case 1:
               temp = uint8[uint8.length - 1];
@@ -117,6 +135,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
               output += encode(temp << 4 & 0x3F);
               output += '==';
               break;
+
             case 2:
               temp = (uint8[uint8.length - 2] << 8) + uint8[uint8.length - 1];
               output += encode(temp >> 10);
@@ -132,8 +151,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         exports.toByteArray = b64ToByteArray;
         exports.fromByteArray = uint8ToBase64;
       })(typeof exports === 'undefined' ? this.base64js = {} : exports);
-    }).call(this, require("rH1JPG"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/../../node_modules/base64-js/lib/b64.js", "/../../node_modules/base64-js/lib");
-  }, { "buffer": 2, "rH1JPG": 4 }], 2: [function (require, module, exports) {
+    }).call(this, require("e/U+97"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/..\\..\\node_modules\\base64-js\\lib\\b64.js", "/..\\..\\node_modules\\base64-js\\lib");
+  }, {
+    "buffer": 2,
+    "e/U+97": 4
+  }],
+  2: [function (require, module, exports) {
     (function (process, global, Buffer, __argument0, __argument1, __argument2, __argument3, __filename, __dirname) {
       /*!
        * The buffer module from node.js, for the browser.
@@ -141,20 +164,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
        * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
        * @license  MIT
        */
-
       var base64 = require('base64-js');
+
       var ieee754 = require('ieee754');
 
       exports.Buffer = Buffer;
       exports.SlowBuffer = Buffer;
       exports.INSPECT_MAX_BYTES = 50;
       Buffer.poolSize = 8192;
-
       /**
        * If `Buffer._useTypedArrays`:
        *   === true    Use Uint8Array implementation (fastest)
        *   === false   Use Object implementation (compatible down to IE6)
        */
+
       Buffer._useTypedArrays = function () {
         // Detect if browser supports Typed Arrays. Supported browsers are IE 10+, Firefox 4+,
         // Chrome 7+, Safari 5.1+, Opera 11.6+, iOS 4.2+. If the browser does not support adding
@@ -164,15 +187,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         try {
           var buf = new ArrayBuffer(0);
           var arr = new Uint8Array(buf);
+
           arr.foo = function () {
             return 42;
           };
+
           return 42 === arr.foo() && typeof arr.subarray === 'function'; // Chrome 9-10 lack `subarray`
         } catch (e) {
           return false;
         }
       }();
-
       /**
        * Class: Buffer
        * =============
@@ -185,26 +209,29 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
        * By augmenting the instances, we can avoid modifying the `Uint8Array`
        * prototype.
        */
+
+
       function Buffer(subject, encoding, noZero) {
         if (!(this instanceof Buffer)) return new Buffer(subject, encoding, noZero);
 
-        var type = typeof subject === "undefined" ? "undefined" : _typeof(subject);
-
-        // Workaround: node's base64 implementation allows for non-padded strings
+        var type = _typeof(subject); // Workaround: node's base64 implementation allows for non-padded strings
         // while base64-js does not.
+
+
         if (encoding === 'base64' && type === 'string') {
           subject = stringtrim(subject);
+
           while (subject.length % 4 !== 0) {
             subject = subject + '=';
           }
-        }
+        } // Find the length
 
-        // Find the length
+
         var length;
         if (type === 'number') length = coerce(subject);else if (type === 'string') length = Buffer.byteLength(subject, encoding);else if (type === 'object') length = coerce(subject.length); // assume that object is array-like
         else throw new Error('First argument needs to be a number, array or string.');
-
         var buf;
+
         if (Buffer._useTypedArrays) {
           // Preferred: Return an augmented `Uint8Array` instance for best performance
           buf = Buffer._augment(new Uint8Array(length));
@@ -216,6 +243,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         var i;
+
         if (Buffer._useTypedArrays && typeof subject.byteLength === 'number') {
           // Speed optimization -- use set if we're copying from a typed array
           buf._set(subject);
@@ -233,10 +261,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         return buf;
-      }
-
-      // STATIC METHODS
+      } // STATIC METHODS
       // ==============
+
 
       Buffer.isEncoding = function (encoding) {
         switch (String(encoding).toLowerCase()) {
@@ -252,6 +279,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           case 'utf16le':
           case 'utf-16le':
             return true;
+
           default:
             return false;
         }
@@ -264,31 +292,38 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       Buffer.byteLength = function (str, encoding) {
         var ret;
         str = str + '';
+
         switch (encoding || 'utf8') {
           case 'hex':
             ret = str.length / 2;
             break;
+
           case 'utf8':
           case 'utf-8':
             ret = utf8ToBytes(str).length;
             break;
+
           case 'ascii':
           case 'binary':
           case 'raw':
             ret = str.length;
             break;
+
           case 'base64':
             ret = base64ToBytes(str).length;
             break;
+
           case 'ucs2':
           case 'ucs-2':
           case 'utf16le':
           case 'utf-16le':
             ret = str.length * 2;
             break;
+
           default:
             throw new Error('Unknown encoding');
         }
+
         return ret;
       };
 
@@ -302,8 +337,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         var i;
+
         if (typeof totalLength !== 'number') {
           totalLength = 0;
+
           for (i = 0; i < list.length; i++) {
             totalLength += list[i].length;
           }
@@ -311,41 +348,47 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var buf = new Buffer(totalLength);
         var pos = 0;
+
         for (i = 0; i < list.length; i++) {
           var item = list[i];
           item.copy(buf, pos);
           pos += item.length;
         }
-        return buf;
-      };
 
-      // BUFFER INSTANCE METHODS
+        return buf;
+      }; // BUFFER INSTANCE METHODS
       // =======================
+
 
       function _hexWrite(buf, string, offset, length) {
         offset = Number(offset) || 0;
         var remaining = buf.length - offset;
+
         if (!length) {
           length = remaining;
         } else {
           length = Number(length);
+
           if (length > remaining) {
             length = remaining;
           }
-        }
+        } // must be an even number of digits
 
-        // must be an even number of digits
+
         var strLen = string.length;
         assert(strLen % 2 === 0, 'Invalid hex string');
 
         if (length > strLen / 2) {
           length = strLen / 2;
         }
+
         for (var i = 0; i < length; i++) {
-          var byte = parseInt(string.substr(i * 2, 2), 16);
-          assert(!isNaN(byte), 'Invalid hex string');
-          buf[offset + i] = byte;
+          var _byte = parseInt(string.substr(i * 2, 2), 16);
+
+          assert(!isNaN(_byte), 'Invalid hex string');
+          buf[offset + i] = _byte;
         }
+
         Buffer._charsWritten = i * 2;
         return i;
       }
@@ -392,83 +435,98 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         offset = Number(offset) || 0;
         var remaining = this.length - offset;
+
         if (!length) {
           length = remaining;
         } else {
           length = Number(length);
+
           if (length > remaining) {
             length = remaining;
           }
         }
-        encoding = String(encoding || 'utf8').toLowerCase();
 
+        encoding = String(encoding || 'utf8').toLowerCase();
         var ret;
+
         switch (encoding) {
           case 'hex':
             ret = _hexWrite(this, string, offset, length);
             break;
+
           case 'utf8':
           case 'utf-8':
             ret = _utf8Write(this, string, offset, length);
             break;
+
           case 'ascii':
             ret = _asciiWrite(this, string, offset, length);
             break;
+
           case 'binary':
             ret = _binaryWrite(this, string, offset, length);
             break;
+
           case 'base64':
             ret = _base64Write(this, string, offset, length);
             break;
+
           case 'ucs2':
           case 'ucs-2':
           case 'utf16le':
           case 'utf-16le':
             ret = _utf16leWrite(this, string, offset, length);
             break;
+
           default:
             throw new Error('Unknown encoding');
         }
+
         return ret;
       };
 
       Buffer.prototype.toString = function (encoding, start, end) {
         var self = this;
-
         encoding = String(encoding || 'utf8').toLowerCase();
         start = Number(start) || 0;
-        end = end !== undefined ? Number(end) : end = self.length;
+        end = end !== undefined ? Number(end) : end = self.length; // Fastpath empty strings
 
-        // Fastpath empty strings
         if (end === start) return '';
-
         var ret;
+
         switch (encoding) {
           case 'hex':
             ret = _hexSlice(self, start, end);
             break;
+
           case 'utf8':
           case 'utf-8':
             ret = _utf8Slice(self, start, end);
             break;
+
           case 'ascii':
             ret = _asciiSlice(self, start, end);
             break;
+
           case 'binary':
             ret = _binarySlice(self, start, end);
             break;
+
           case 'base64':
             ret = _base64Slice(self, start, end);
             break;
+
           case 'ucs2':
           case 'ucs-2':
           case 'utf16le':
           case 'utf-16le':
             ret = _utf16leSlice(self, start, end);
             break;
+
           default:
             throw new Error('Unknown encoding');
         }
+
         return ret;
       };
 
@@ -477,30 +535,25 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           type: 'Buffer',
           data: Array.prototype.slice.call(this._arr || this, 0)
         };
-      };
+      }; // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
 
-      // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
+
       Buffer.prototype.copy = function (target, target_start, start, end) {
         var source = this;
-
         if (!start) start = 0;
         if (!end && end !== 0) end = this.length;
-        if (!target_start) target_start = 0;
+        if (!target_start) target_start = 0; // Copy 0 bytes; we're done
 
-        // Copy 0 bytes; we're done
         if (end === start) return;
-        if (target.length === 0 || source.length === 0) return;
+        if (target.length === 0 || source.length === 0) return; // Fatal error conditions
 
-        // Fatal error conditions
         assert(end >= start, 'sourceEnd < sourceStart');
         assert(target_start >= 0 && target_start < target.length, 'targetStart out of bounds');
         assert(start >= 0 && start < source.length, 'sourceStart out of bounds');
-        assert(end >= 0 && end <= source.length, 'sourceEnd out of bounds');
+        assert(end >= 0 && end <= source.length, 'sourceEnd out of bounds'); // Are we oob?
 
-        // Are we oob?
         if (end > this.length) end = this.length;
         if (target.length - target_start < end - start) end = target.length - target_start + start;
-
         var len = end - start;
 
         if (len < 100 || !Buffer._useTypedArrays) {
@@ -543,7 +596,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         for (var i = start; i < end; i++) {
           ret += String.fromCharCode(buf[i]);
-        }return ret;
+        }
+
+        return ret;
       }
 
       function _binarySlice(buf, start, end) {
@@ -552,23 +607,25 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       function _hexSlice(buf, start, end) {
         var len = buf.length;
-
         if (!start || start < 0) start = 0;
         if (!end || end < 0 || end > len) end = len;
-
         var out = '';
+
         for (var i = start; i < end; i++) {
           out += toHex(buf[i]);
         }
+
         return out;
       }
 
       function _utf16leSlice(buf, start, end) {
         var bytes = buf.slice(start, end);
         var res = '';
+
         for (var i = 0; i < bytes.length; i += 2) {
           res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256);
         }
+
         return res;
       }
 
@@ -582,20 +639,22 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         } else {
           var sliceLen = end - start;
           var newBuf = new Buffer(sliceLen, undefined, true);
+
           for (var i = 0; i < sliceLen; i++) {
             newBuf[i] = this[i + start];
           }
+
           return newBuf;
         }
-      };
+      }; // `get` will be removed in Node 0.13+
 
-      // `get` will be removed in Node 0.13+
+
       Buffer.prototype.get = function (offset) {
         console.log('.get() is deprecated. Access using array indexes instead.');
         return this.readUInt8(offset);
-      };
+      }; // `set` will be removed in Node 0.13+
 
-      // `set` will be removed in Node 0.13+
+
       Buffer.prototype.set = function (v, offset) {
         console.log('.set() is deprecated. Access using array indexes instead.');
         return this.writeUInt8(v, offset);
@@ -608,7 +667,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         if (offset >= this.length) return;
-
         return this[offset];
       };
 
@@ -621,8 +679,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var len = buf.length;
         if (offset >= len) return;
-
         var val;
+
         if (littleEndian) {
           val = buf[offset];
           if (offset + 1 < len) val |= buf[offset + 1] << 8;
@@ -630,6 +688,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           val = buf[offset] << 8;
           if (offset + 1 < len) val |= buf[offset + 1];
         }
+
         return val;
       }
 
@@ -650,8 +709,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var len = buf.length;
         if (offset >= len) return;
-
         var val;
+
         if (littleEndian) {
           if (offset + 2 < len) val = buf[offset + 2] << 16;
           if (offset + 1 < len) val |= buf[offset + 1] << 8;
@@ -663,6 +722,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           if (offset + 3 < len) val |= buf[offset + 3];
           val = val + (buf[offset] << 24 >>> 0);
         }
+
         return val;
       }
 
@@ -681,7 +741,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         if (offset >= this.length) return;
-
         var neg = this[offset] & 0x80;
         if (neg) return (0xff - this[offset] + 1) * -1;else return this[offset];
       };
@@ -697,6 +756,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (offset >= len) return;
 
         var val = _readUInt16(buf, offset, littleEndian, true);
+
         var neg = val & 0x8000;
         if (neg) return (0xffff - val + 1) * -1;else return val;
       }
@@ -720,6 +780,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (offset >= len) return;
 
         var val = _readUInt32(buf, offset, littleEndian, true);
+
         var neg = val & 0x80000000;
         if (neg) return (0xffffffff - val + 1) * -1;else return val;
       }
@@ -775,7 +836,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         if (offset >= this.length) return;
-
         this[offset] = value;
       };
 
@@ -838,7 +898,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         if (offset >= this.length) return;
-
         if (value >= 0) this.writeUInt8(value, offset, noAssert);else this.writeUInt8(0xff + value + 1, offset, noAssert);
       };
 
@@ -853,7 +912,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var len = buf.length;
         if (offset >= len) return;
-
         if (value >= 0) _writeUInt16(buf, value, offset, littleEndian, noAssert);else _writeUInt16(buf, 0xffff + value + 1, offset, littleEndian, noAssert);
       }
 
@@ -876,7 +934,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var len = buf.length;
         if (offset >= len) return;
-
         if (value >= 0) _writeUInt32(buf, value, offset, littleEndian, noAssert);else _writeUInt32(buf, 0xffffffff + value + 1, offset, littleEndian, noAssert);
       }
 
@@ -899,7 +956,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var len = buf.length;
         if (offset >= len) return;
-
         ieee754.write(buf, value, offset, littleEndian, 23, 4);
       }
 
@@ -922,7 +978,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var len = buf.length;
         if (offset >= len) return;
-
         ieee754.write(buf, value, offset, littleEndian, 52, 8);
       }
 
@@ -932,9 +987,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       Buffer.prototype.writeDoubleBE = function (value, offset, noAssert) {
         _writeDouble(this, value, offset, false, noAssert);
-      };
+      }; // fill(value, start=0, end=buffer.length)
 
-      // fill(value, start=0, end=buffer.length)
+
       Buffer.prototype.fill = function (value, start, end) {
         if (!value) value = 0;
         if (!start) start = 0;
@@ -945,12 +1000,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         assert(typeof value === 'number' && !isNaN(value), 'value is not a number');
-        assert(end >= start, 'end < start');
+        assert(end >= start, 'end < start'); // Fill 0 bytes; we're done
 
-        // Fill 0 bytes; we're done
         if (end === start) return;
         if (this.length === 0) return;
-
         assert(start >= 0 && start < this.length, 'start out of bounds');
         assert(end >= 0 && end <= this.length, 'end out of bounds');
 
@@ -962,37 +1015,43 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       Buffer.prototype.inspect = function () {
         var out = [];
         var len = this.length;
+
         for (var i = 0; i < len; i++) {
           out[i] = toHex(this[i]);
+
           if (i === exports.INSPECT_MAX_BYTES) {
             out[i + 1] = '...';
             break;
           }
         }
+
         return '<Buffer ' + out.join(' ') + '>';
       };
-
       /**
        * Creates a new `ArrayBuffer` with the *copied* memory of the buffer instance.
        * Added in Node 0.12. Only available in browsers that support ArrayBuffer.
        */
+
+
       Buffer.prototype.toArrayBuffer = function () {
         if (typeof Uint8Array !== 'undefined') {
           if (Buffer._useTypedArrays) {
             return new Buffer(this).buffer;
           } else {
             var buf = new Uint8Array(this.length);
+
             for (var i = 0, len = buf.length; i < len; i += 1) {
               buf[i] = this[i];
-            }return buf.buffer;
+            }
+
+            return buf.buffer;
           }
         } else {
           throw new Error('Buffer.toArrayBuffer not supported in this browser');
         }
-      };
-
-      // HELPER FUNCTIONS
+      }; // HELPER FUNCTIONS
       // ================
+
 
       function stringtrim(str) {
         if (str.trim) return str.trim();
@@ -1000,21 +1059,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
 
       var BP = Buffer.prototype;
-
       /**
        * Augment a Uint8Array *instance* (not the Uint8Array class!) with Buffer methods
        */
+
       Buffer._augment = function (arr) {
-        arr._isBuffer = true;
+        arr._isBuffer = true; // save reference to original Uint8Array get/set methods before overwriting
 
-        // save reference to original Uint8Array get/set methods before overwriting
         arr._get = arr.get;
-        arr._set = arr.set;
+        arr._set = arr.set; // deprecated, will be removed in node 0.13+
 
-        // deprecated, will be removed in node 0.13+
         arr.get = BP.get;
         arr.set = BP.set;
-
         arr.write = BP.write;
         arr.toString = BP.toString;
         arr.toLocaleString = BP.toString;
@@ -1052,14 +1108,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         arr.fill = BP.fill;
         arr.inspect = BP.inspect;
         arr.toArrayBuffer = BP.toArrayBuffer;
-
         return arr;
-      };
+      }; // slice(start, end)
 
-      // slice(start, end)
+
       function clamp(index, len, defaultValue) {
         if (typeof index !== 'number') return defaultValue;
         index = ~~index; // Coerce to integer.
+
         if (index >= len) return len;
         if (index >= 0) return index;
         index += len;
@@ -1082,7 +1138,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
 
       function isArrayish(subject) {
-        return isArray(subject) || Buffer.isBuffer(subject) || subject && (typeof subject === "undefined" ? "undefined" : _typeof(subject)) === 'object' && typeof subject.length === 'number';
+        return isArray(subject) || Buffer.isBuffer(subject) || subject && _typeof(subject) === 'object' && typeof subject.length === 'number';
       }
 
       function toHex(n) {
@@ -1092,32 +1148,38 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       function utf8ToBytes(str) {
         var byteArray = [];
+
         for (var i = 0; i < str.length; i++) {
           var b = str.charCodeAt(i);
           if (b <= 0x7F) byteArray.push(str.charCodeAt(i));else {
             var start = i;
             if (b >= 0xD800 && b <= 0xDFFF) i++;
             var h = encodeURIComponent(str.slice(start, i + 1)).substr(1).split('%');
+
             for (var j = 0; j < h.length; j++) {
               byteArray.push(parseInt(h[j], 16));
             }
           }
         }
+
         return byteArray;
       }
 
       function asciiToBytes(str) {
         var byteArray = [];
+
         for (var i = 0; i < str.length; i++) {
           // Node's code seems to be doing this and not & 0x7F..
           byteArray.push(str.charCodeAt(i) & 0xFF);
         }
+
         return byteArray;
       }
 
       function utf16leToBytes(str) {
         var c, hi, lo;
         var byteArray = [];
+
         for (var i = 0; i < str.length; i++) {
           c = str.charCodeAt(i);
           hi = c >> 8;
@@ -1135,10 +1197,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       function blitBuffer(src, dst, offset, length) {
         var pos;
+
         for (var i = 0; i < length; i++) {
           if (i + offset >= dst.length || i >= src.length) break;
           dst[i + offset] = src[i];
         }
+
         return i;
       }
 
@@ -1149,12 +1213,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           return String.fromCharCode(0xFFFD); // UTF 8 invalid char
         }
       }
-
       /*
        * We have to make sure that the value is a valid integer. This means that it
        * is non-negative. It has no fractional component and that it does not
        * exceed the maximum allowed value.
        */
+
+
       function verifuint(value, max) {
         assert(typeof value === 'number', 'cannot write a non-number as a number');
         assert(value >= 0, 'specified a negative value for writing an unsigned value');
@@ -1178,8 +1243,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       function assert(test, message) {
         if (!test) throw new Error(message || 'Failed assertion');
       }
-    }).call(this, require("rH1JPG"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/../../node_modules/buffer/index.js", "/../../node_modules/buffer");
-  }, { "base64-js": 1, "buffer": 2, "ieee754": 3, "rH1JPG": 4 }], 3: [function (require, module, exports) {
+    }).call(this, require("e/U+97"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/..\\..\\node_modules\\buffer\\index.js", "/..\\..\\node_modules\\buffer");
+  }, {
+    "base64-js": 1,
+    "buffer": 2,
+    "e/U+97": 4,
+    "ieee754": 3
+  }],
+  3: [function (require, module, exports) {
     (function (process, global, Buffer, __argument0, __argument1, __argument2, __argument3, __filename, __dirname) {
       exports.read = function (buffer, offset, isLE, mLen, nBytes) {
         var e, m;
@@ -1190,17 +1261,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var i = isLE ? nBytes - 1 : 0;
         var d = isLE ? -1 : 1;
         var s = buffer[offset + i];
-
         i += d;
-
         e = s & (1 << -nBits) - 1;
         s >>= -nBits;
         nBits += eLen;
+
         for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {}
 
         m = e & (1 << -nBits) - 1;
         e >>= -nBits;
         nBits += mLen;
+
         for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {}
 
         if (e === 0) {
@@ -1211,6 +1282,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           m = m + Math.pow(2, mLen);
           e = e - eBias;
         }
+
         return (s ? -1 : 1) * m * Math.pow(2, e - mLen);
       };
 
@@ -1223,7 +1295,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var i = isLE ? 0 : nBytes - 1;
         var d = isLE ? 1 : -1;
         var s = value < 0 || value === 0 && 1 / value < 0 ? 1 : 0;
-
         value = Math.abs(value);
 
         if (isNaN(value) || value === Infinity) {
@@ -1231,15 +1302,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           e = eMax;
         } else {
           e = Math.floor(Math.log(value) / Math.LN2);
+
           if (value * (c = Math.pow(2, -e)) < 1) {
             e--;
             c *= 2;
           }
+
           if (e + eBias >= 1) {
             value += rt / c;
           } else {
             value += rt * Math.pow(2, 1 - eBias);
           }
+
           if (value * c >= 2) {
             e++;
             c /= 2;
@@ -1261,15 +1335,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         e = e << mLen | m;
         eLen += mLen;
+
         for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
 
         buffer[offset + i - d] |= s * 128;
       };
-    }).call(this, require("rH1JPG"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/../../node_modules/ieee754/index.js", "/../../node_modules/ieee754");
-  }, { "buffer": 2, "rH1JPG": 4 }], 4: [function (require, module, exports) {
+    }).call(this, require("e/U+97"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/..\\..\\node_modules\\ieee754\\index.js", "/..\\..\\node_modules\\ieee754");
+  }, {
+    "buffer": 2,
+    "e/U+97": 4
+  }],
+  4: [function (require, module, exports) {
     (function (process, global, Buffer, __argument0, __argument1, __argument2, __argument3, __filename, __dirname) {
       // shim for using process in browser
-
       var process = module.exports = {};
 
       process.nextTick = function () {
@@ -1286,15 +1364,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           var queue = [];
           window.addEventListener('message', function (ev) {
             var source = ev.source;
+
             if ((source === window || source === null) && ev.data === 'process-tick') {
               ev.stopPropagation();
+
               if (queue.length > 0) {
                 var fn = queue.shift();
                 fn();
               }
             }
           }, true);
-
           return function nextTick(fn) {
             queue.push(fn);
             window.postMessage('process-tick', '*');
@@ -1323,53 +1402,57 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       process.binding = function (name) {
         throw new Error('process.binding is not supported');
-      };
+      }; // TODO(shtylman)
 
-      // TODO(shtylman)
+
       process.cwd = function () {
         return '/';
       };
+
       process.chdir = function (dir) {
         throw new Error('process.chdir is not supported');
       };
-    }).call(this, require("rH1JPG"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/../../node_modules/process/browser.js", "/../../node_modules/process");
-  }, { "buffer": 2, "rH1JPG": 4 }], 5: [function (require, module, exports) {
+    }).call(this, require("e/U+97"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/..\\..\\node_modules\\process\\browser.js", "/..\\..\\node_modules\\process");
+  }, {
+    "buffer": 2,
+    "e/U+97": 4
+  }],
+  5: [function (require, module, exports) {
     (function (process, global, Buffer, __argument0, __argument1, __argument2, __argument3, __filename, __dirname) {
       var Theme = require('./modules/theme');
 
       jQuery(document).ready(function ($) {
         Theme.init();
       });
-    }).call(this, require("rH1JPG"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/fake_2d6aeede.js", "/");
-  }, { "./modules/theme": 6, "buffer": 2, "rH1JPG": 4 }], 6: [function (require, module, exports) {
+    }).call(this, require("e/U+97"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/fake_aa51bd5.js", "/");
+  }, {
+    "./modules/theme": 6,
+    "buffer": 2,
+    "e/U+97": 4
+  }],
+  6: [function (require, module, exports) {
     (function (process, global, Buffer, __argument0, __argument1, __argument2, __argument3, __filename, __dirname) {
       // ------------------------------------
       //
       // Theme
       //
       // ------------------------------------
-
       (function ($) {
-
         if (typeof window.Theme == 'undefined') window.Theme = {};
-
         Theme = {
-
           settings: {},
 
-          // ------------------------------------
-          // Theme Init
-          // ------------------------------------
-
-          init: function init() {
-
-            var i = 'test';
-            console.log('Theme initilised');
+          /*
+           * Theme init
+           */
+          init: function init() {// Init 
           }
         };
-
         module.exports = Theme;
       })(jQuery);
-    }).call(this, require("rH1JPG"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/modules/theme.js", "/modules");
-  }, { "buffer": 2, "rH1JPG": 4 }] }, {}, [5]);
-//# sourceMappingURL=site.js.map
+    }).call(this, require("e/U+97"), typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {}, require("buffer").Buffer, arguments[3], arguments[4], arguments[5], arguments[6], "/modules\\theme.js", "/modules");
+  }, {
+    "buffer": 2,
+    "e/U+97": 4
+  }]
+}, {}, [5]);

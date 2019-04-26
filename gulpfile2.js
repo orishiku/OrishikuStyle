@@ -1,12 +1,10 @@
 'use strict';
 
 const $           = require('gulp-load-plugins')();
-const gulp		  = require('gulp');
-const del 		  = require('del');
+const gulp        = require('gulp');
 const browserSync = require('browser-sync').create();
-const browserify  = require('browserify');
 
-const site_name = param('site','base');
+const site_name = 'base';
 const src_path  = 'src';
 const dist_path = 'dist';
 
@@ -15,35 +13,19 @@ let proxy = 'base.dev';
 let staticSrc = src_path+'/**/*.{webm,svg,eot,ttf,woff,woff2,otf,mp4,json,pdf,ico}';
 
 
-function param(param_name, default_result){
-	const args = process.argv.slice(2)
-	let param  = default_result;
-
-	args.forEach((val, index) => {
-		if(val.includes(param_name)){
-			const p = val.split("=");
-			if(p.length>0) {
-				param = p[1];
-			}
-		}
-	});
-	
-	console.log(`Set --${param_name} to: ${param}`);
-	
-	return param;
-}
-
 /*  
  * Clean
  */
-gulp.task('clean', function() {
-	return del([dist_path+'/**/*',]);
+gulp.task('clean', () => {
+	
+	return gulp.src(dist_path, {read: false})
+		.pipe($.clean());
 });
 
 /*  
  * Copy static files
  */
-gulp.task('copy', function() {
+gulp.task('copy', () => {
 	
 	return gulp.src(staticSrc)
 	.pipe(gulp.dest(dist_path+'/'))
@@ -52,7 +34,7 @@ gulp.task('copy', function() {
 /*  
  * SASS
  */
-gulp.task("sass", function() {
+gulp.task("sass", () => {
 
 	let out = gulp.src(src_path+'/scss/'+site_name+'.scss')
 		.pipe( $.cssGlobbing({
@@ -99,7 +81,7 @@ gulp.task("sass", function() {
 /*  
  * Javascript
  */
-gulp.task('js', function() {
+gulp.task('js', () => {
 	
 	// Development 
 	if (debug) {
@@ -113,7 +95,7 @@ gulp.task('js', function() {
 				$.notify().write(err);
 			})
 			.pipe($.babel({
-				presets: ['@babel/env']
+				presets: ['es2015']
 			}))
 			.pipe($.sourcemaps.write('./'))
 			.pipe(gulp.dest(dist_path+'/js'))
@@ -129,26 +111,27 @@ gulp.task('js', function() {
 				$.notify().write(err);
 			})
 			.pipe($.babel({
-				presets: ['@babel/env']
+				presets: ['es2015']
 			}))
 			.pipe(gulp.dest(dist_path+'/js'))
 	}
 
 });
 
+
 /*  
  * Javascript watch
  */
-gulp.task('js-watch', gulp.series('js', function(done) {
+gulp.task('js-watch', ['js'], (done) => {
 	
 	browserSync.reload();
 	done();
-}));
+});
 
 /*  
  * Image optimisation
  */
-gulp.task('images', function() {
+gulp.task('images', () => {
   
 	return gulp.src(['./'+src_path+'/img/**/*.jpg', './'+src_path+'/img/**/*.png', './'+src_path+'/img/**/*.jpeg'])
 		.pipe($.image())
@@ -158,7 +141,7 @@ gulp.task('images', function() {
 /*  
  * Serve and watch for changes
  */
-gulp.task( "dev", gulp.series(['copy', 'sass', 'js'], function() {
+gulp.task( "dev", ['copy', 'sass', 'js'], () => {
 
 	// Serve
 	browserSync.init({
@@ -167,26 +150,25 @@ gulp.task( "dev", gulp.series(['copy', 'sass', 'js'], function() {
 	});
 
 	// Watch
-	gulp.watch(src_path+'/img/**/*', gulp.series(['images']));
-	gulp.watch(src_path+'/scss/**/*.scss', gulp.series(['sass']));
-	gulp.watch(src_path+'/js/**/*.js', gulp.series(['js-watch']));
+	gulp.watch(src_path+'/img/**/*', ['images']);
+	gulp.watch(src_path+'/scss/**/*.scss', ['sass']);
+	gulp.watch(src_path+'/js/**/*.js', ['js-watch']);
 	gulp.watch(['./**/*.html']).on('change', browserSync.reload);
-	gulp.watch(staticSrc, gulp.series(['copy']));
+	gulp.watch(staticSrc, ['copy']);
 
 	gulp.watch([
 		dist_path+'/**/*.js',
 		dist_path+'/**/*.css'
 	]);
-}));
+});
 
 /*  
  * Set debug mode to false
  */
-gulp.task('production', function(done) {
+gulp.task('production', () => {
 
 	debug = false;
 	console.log(`Set debug to: ${debug}`);
-	done();
 })
 
-gulp.task('build', gulp.series(['production', 'clean', 'images', 'copy', 'sass', 'js']));
+gulp.task('build', ['production', 'images', 'copy', 'sass', 'js']);

@@ -110,7 +110,7 @@ $base-max-width:         map-get(map-get($grid-settings, base), max-width);
 	width: get-columns-width($columns, $container-columns, $offset, $gutter);
 	margin-right: $gutter;
 	
-	@if ($offset > 0 && $offset < $container-columns) {
+	@if ($offset > 0 and $offset < $container-columns) {
 		margin-left: get-offset-width($offset, $container-columns, $offset, $gutter);
 	}
 

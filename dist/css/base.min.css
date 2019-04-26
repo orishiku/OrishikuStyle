@@ -1355,6 +1355,7 @@ span.icon-twitter:before {
 
 /* '' */
 * {
+  -webkit-box-sizing: border-box;
   box-sizing: border-box; }
 
 .container {
@@ -1659,6 +1660,7 @@ ul.menu-secondary li {
   cursor: pointer;
   display: inline-block; }
   [data-tooltip]:before, [data-tooltip]:after {
+    -webkit-transition: all .2s ease-out;
     transition: all .2s ease-out;
     position: absolute;
     visibility: hidden;
@@ -1677,6 +1679,7 @@ ul.menu-secondary li {
     z-index: 10001;
     bottom: -10px; }
   [data-tooltip]:after {
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     content: attr(data-tooltip);
     padding: 0.5em 0.75em;
@@ -2153,5 +2156,3 @@ article.grid-examples {
     @media (max-width: 736px) {
       article.grid-examples .box.-tall code {
         font-size: 0.8rem; } }
-
-/*# sourceMappingURL=site.min.css.map */
