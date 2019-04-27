@@ -156,21 +156,6 @@ $base-max-width:         map-get(map-get($grid-settings, base), max-width);
 	}
 }
 
-@mixin omega() {
-	
-	margin-right: 0;
-
-	@each $breakpoint, $breakpoint-settings in $grid-settings {
-		
-		@if ($breakpoint != 'base') {
-			@include respond-to($breakpoint) {
-				margin-right: 0;
-			}
-		}
-
-	}
-}
-
 @mixin columns($columns: $base-container-columns, $offset: 0, $gutter: null) {
 	
 	// Build default base columns
